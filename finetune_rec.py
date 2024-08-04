@@ -116,7 +116,8 @@ def train(
         device_map=device_map,
     )
 
-    tokenizer = LlamaTokenizer.from_pretrained(base_model)
+    # Added torch_dtype=torch.float16
+    tokenizer = LlamaTokenizer.from_pretrained(base_model, torch_dtype=torch.float16)
 
     tokenizer.pad_token_id = (
         0  # unk. we want this to be different from the eos token
