@@ -73,8 +73,8 @@ def main(
         exit(0)
         # data[train_sce][test_sce][model_name][seed][sample] = 
 
-    # Added torch_dtype=torch.float16
-    tokenizer = LlamaTokenizer.from_pretrained(base_model, torch_dtype=torch.float16)
+    # Added truncation=True, max_length=512
+    tokenizer = LlamaTokenizer.from_pretrained(base_model, truncation=True, max_length=512)
     if device == "cuda":
         model = LlamaForCausalLM.from_pretrained(
             base_model,
