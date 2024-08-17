@@ -29,7 +29,7 @@ def main(
     base_model: str = "",
     lora_weights: str = "tloen/alpaca-lora-7b",
     test_data_path: str = "data/test.json",
-    result_json_data: str = "temp.json",
+    result_json_data: str = "/kaggle/working/TALLRec/test_result/temp.json",
     batch_size: int = 32,
     share_gradio: bool = False,
 ):
