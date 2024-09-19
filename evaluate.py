@@ -119,7 +119,6 @@ def main(
 
     # Move model to DataParallel, using two GPUs
     print(f"########### Device: {device}")
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
     if torch.cuda.is_available():
         num_gpus = torch.cuda.device_count()
         print(f"Number of GPUs available: {num_gpus}")
