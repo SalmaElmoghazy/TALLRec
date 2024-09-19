@@ -137,6 +137,7 @@ def main(
     ):
         
         # Move model to DataParallel, using two GPUs
+        print(f"########### Device: {device}")
         model_parallel = DataParallel(model, device_ids=[0, 1])  # Use both GPUs
         model_parallel.to(device)  # Primary GPU for model execution
         
