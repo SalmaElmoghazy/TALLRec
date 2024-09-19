@@ -139,10 +139,10 @@ def main(
         # Move model to DataParallel, using two GPUs
         print(f"########### Device: {device}")
         model_parallel = DataParallel(model, device_ids=[0, 1])  # Use both GPUs
-        model_parallel.to(device)  # Primary GPU for model execution
+        model_parallel.to("cuda:0")  # Primary GPU for model execution
         
         prompt = [generate_prompt(instruction, input) for instruction, input in zip(instructions, inputs)]
-        inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to(device)
+        inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to("cuda:0")
         generation_config = GenerationConfig(
             temperature=temperature,
             top_p=top_p,
