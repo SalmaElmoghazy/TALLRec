@@ -117,6 +117,12 @@ def main(
     model.config.bos_token_id = 1
     model.config.eos_token_id = 2
 
+    # Move model to DataParallel, using two GPUs
+    print(f"########### Device: {device}")
+    model = model.to('cuda:0')  # Move model to GPU 0
+    model = DataParallel(model, device_ids=[0, 1])  # Use both GPUs
+    model.to("cuda:0")  # Primary GPU for model execution
+
     if not load_8bit:
         model.half()  # seems to fix bugs for some users.
 
@@ -136,11 +142,7 @@ def main(
         **kwargs,
     ):
         
-        # Move model to DataParallel, using two GPUs
-        print(f"########### Device: {device}")
-        model = model.to('cuda:0')  # Move model to GPU 0
-        model_parallel = DataParallel(model, device_ids=[0, 1])  # Use both GPUs
-        model_parallel.to("cuda:0")  # Primary GPU for model execution
+        
         
         prompt = [generate_prompt(instruction, input) for instruction, input in zip(instructions, inputs)]
         inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to("cuda:0")
@@ -152,7 +154,7 @@ def main(
             **kwargs,
         )
         with torch.no_grad():
-            generation_output = model_parallel.generate(
+            generation_output = model.generate(
                 **inputs,
                 generation_config=generation_config,
                 return_dict_in_generate=True,
