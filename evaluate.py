@@ -161,7 +161,7 @@ def main(
         original_model = model.module if isinstance(model, torch.nn.DataParallel) else model
     
         with torch.no_grad():
-            generation_output = model.generate(
+            generation_output = original_model.generate(
                 **inputs,
                 generation_config=generation_config,
                 return_dict_in_generate=True,
