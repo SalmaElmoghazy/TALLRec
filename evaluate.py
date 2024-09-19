@@ -157,11 +157,9 @@ def main(
             **kwargs,
         )
 
-        # Access the original model from DataParallel
-        original_model = model.module if isinstance(model, torch.nn.DataParallel) else model
     
         with torch.no_grad():
-            generation_output = original_model.generate(
+            generation_output = model.module.generate(
                 **inputs,
                 generation_config=generation_config,
                 return_dict_in_generate=True,
