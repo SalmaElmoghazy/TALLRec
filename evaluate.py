@@ -119,6 +119,7 @@ def main(
 
     # Move model to DataParallel, using two GPUs
     print(f"########### Device: {device}")
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
     model = model.to('cuda:0')  # Move model to GPU 0
     model = DataParallel(model, device_ids=[0, 1])  # Use both GPUs
     model.to("cuda:0")  # Primary GPU for model execution
