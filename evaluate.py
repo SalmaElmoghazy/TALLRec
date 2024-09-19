@@ -134,6 +134,11 @@ def main(
         batch_size=1,
         **kwargs,
     ):
+        
+        # Move model to DataParallel, using two GPUs
+        model_parallel = DataParallel(model, device_ids=[0, 1])  # Use both GPUs
+        model_parallel.to(device)  # Primary GPU for model execution
+        
         prompt = [generate_prompt(instruction, input) for instruction, input in zip(instructions, inputs)]
         inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to(device)
         generation_config = GenerationConfig(
