@@ -159,7 +159,7 @@ def main(
 
     
         with torch.no_grad():
-            generation_output = model.module.generate(
+            generation_output = model.generate(
                 **inputs,
                 generation_config=generation_config,
                 return_dict_in_generate=True,
