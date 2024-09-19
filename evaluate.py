@@ -4,7 +4,7 @@ import fire
 import gradio as gr
 import torch
 from torch.nn import DataParallel
-torch.set_num_threads(1)
+# torch.set_num_threads(1)
 import transformers
 import json
 import os
