@@ -148,7 +148,10 @@ def main(
         
         
         prompt = [generate_prompt(instruction, input) for instruction, input in zip(instructions, inputs)]
-        inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True).to("cuda:0")
+        inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True)
+    
+        # Move tensors to the correct device (same as model)
+        inputs = {key: value.to(device) for key, value in inputs.items()}
         generation_config = GenerationConfig(
             temperature=temperature,
             top_p=top_p,
