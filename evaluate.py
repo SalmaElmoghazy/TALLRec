@@ -23,9 +23,9 @@ try:
 except:  # noqa: E722
     pass
 
-
+# load_8bit was set to False
 def main(
-    load_8bit: bool = False,
+    load_8bit: bool = True, 
     base_model: str = "",
     lora_weights: str = "tloen/alpaca-lora-7b",
     test_data_path: str = "data/test.json",
@@ -122,7 +122,7 @@ def main(
     model.eval()
     if torch.__version__ >= "2" and sys.platform != "win32":
         model = torch.compile(model)
-
+# max_new_tokens was set to 128
     def evaluate(
         instructions,
         inputs=None,
@@ -130,7 +130,7 @@ def main(
         top_p=1.0,
         top_k=40,
         num_beams=1,
-        max_new_tokens=128,
+        max_new_tokens=64,
         batch_size=1,
         **kwargs,
     ):
@@ -152,12 +152,16 @@ def main(
                 max_new_tokens=max_new_tokens,
                 # batch_size=batch_size,
             )
+
+        # Clear cache after generating
+        torch.cuda.empty_cache()
+    
         s = generation_output.sequences
         scores = generation_output.scores[0].softmax(dim=-1)
         logits = torch.tensor(scores[:,[8241, 3782]], dtype=torch.float32).softmax(dim=-1)
-        input_ids = inputs["input_ids"].to(device)
-        L = input_ids.shape[1]
-        s = generation_output.sequences
+        # input_ids = inputs["input_ids"].to(device)
+        # L = input_ids.shape[1]
+        # s = generation_output.sequences
         output = tokenizer.batch_decode(s, skip_special_tokens=True)
         output = [_.split('Response:\n')[-1] for _ in output]
         
