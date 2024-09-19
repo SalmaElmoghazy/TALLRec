@@ -120,8 +120,11 @@ def main(
     # Move model to DataParallel, using two GPUs
     print(f"########### Device: {device}")
     os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
+    if torch.cuda.is_available():
+        num_gpus = torch.cuda.device_count()
+        print(f"Number of GPUs available: {num_gpus}")
     model = model.to('cuda:0')  # Move model to GPU 0
-    model = DataParallel(model, device_ids=[0, 1])  # Use both GPUs
+    model = DataParallel(model, device_ids=list(range(num_gpus)))  # Use both GPUs
     model.to("cuda:0")  # Primary GPU for model execution
 
     if not load_8bit:
