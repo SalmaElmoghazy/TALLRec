@@ -138,6 +138,7 @@ def main(
         
         # Move model to DataParallel, using two GPUs
         print(f"########### Device: {device}")
+        model = model.to('cuda:0')  # Move model to GPU 0
         model_parallel = DataParallel(model, device_ids=[0, 1])  # Use both GPUs
         model_parallel.to("cuda:0")  # Primary GPU for model execution
         
@@ -151,7 +152,7 @@ def main(
             **kwargs,
         )
         with torch.no_grad():
-            generation_output = model.generate(
+            generation_output = model_parallel.generate(
                 **inputs,
                 generation_config=generation_config,
                 return_dict_in_generate=True,
