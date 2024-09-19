@@ -4,12 +4,12 @@ import fire
 import gradio as gr
 import torch
 from torch.nn import DataParallel
-# torch.set_num_threads(1)
+torch.set_num_threads(1)
 import transformers
 import json
 import os
-# os.environ['OPENBLAS_NUM_THREADS'] = '1'
-# os.environ['OMP_NUM_THREADS'] = '1'
+os.environ['OPENBLAS_NUM_THREADS'] = '1'
+os.environ['OMP_NUM_THREADS'] = '1'
 from peft import PeftModel
 from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
 from sklearn.metrics import roc_auc_score
