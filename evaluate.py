@@ -156,6 +156,10 @@ def main(
             num_beams=num_beams,
             **kwargs,
         )
+
+        # Access the original model from DataParallel
+        original_model = model.module if isinstance(model, torch.nn.DataParallel) else model
+    
         with torch.no_grad():
             generation_output = model.generate(
                 **inputs,
