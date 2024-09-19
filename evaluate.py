@@ -26,7 +26,7 @@ except:  # noqa: E722
 
 # load_8bit was set to False
 def main(
-    load_8bit: bool = False, 
+    load_8bit: bool = True, 
     base_model: str = "",
     lora_weights: str = "tloen/alpaca-lora-7b",
     test_data_path: str = "data/test.json",
@@ -117,14 +117,14 @@ def main(
     model.config.bos_token_id = 1
     model.config.eos_token_id = 2
 
-    # Move model to DataParallel, using two GPUs
-    print(f"########### Device: {device}")
-    if torch.cuda.is_available():
-        num_gpus = torch.cuda.device_count()
-        print(f"Number of GPUs available: {num_gpus}")
-    model = model.to('cuda:0')  # Move model to GPU 0
-    model = DataParallel(model, device_ids=list(range(num_gpus)))  # Use both GPUs
-    model.to("cuda:0")  # Primary GPU for model execution
+    # # Move model to DataParallel, using two GPUs
+    # print(f"########### Device: {device}")
+    # if torch.cuda.is_available():
+    #     num_gpus = torch.cuda.device_count()
+    #     print(f"Number of GPUs available: {num_gpus}")
+    # model = model.to('cuda:0')  # Move model to GPU 0
+    # model = DataParallel(model, device_ids=list(range(num_gpus)))  # Use both GPUs
+    # model.to("cuda:0")  # Primary GPU for model execution
 
     if not load_8bit:
         model.half()  # seems to fix bugs for some users.
@@ -148,10 +148,7 @@ def main(
         
         
         prompt = [generate_prompt(instruction, input) for instruction, input in zip(instructions, inputs)]
-        inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True)
-    
-        # Move tensors to the correct device (same as model's primary GPU, i.e., cuda:0)
-        inputs = {key: value.to('cuda:0') for key, value in inputs.items()}
+        inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True, max_length=100).to("cuda:0")
         generation_config = GenerationConfig(
             temperature=temperature,
             top_p=top_p,
