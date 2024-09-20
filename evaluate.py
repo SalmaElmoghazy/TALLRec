@@ -26,7 +26,7 @@ except:  # noqa: E722
 
 # load_8bit was set to False
 def main(
-    load_8bit: bool = False, 
+    load_8bit: bool = True, 
     base_model: str = "",
     lora_weights: str = "tloen/alpaca-lora-7b",
     test_data_path: str = "data/test.json",
