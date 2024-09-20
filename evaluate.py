@@ -140,7 +140,7 @@ def main(
         top_p=1.0,
         top_k=40,
         num_beams=1,
-        max_new_tokens=128,
+        max_new_tokens=100,
         batch_size=1,
         **kwargs,
     ):
