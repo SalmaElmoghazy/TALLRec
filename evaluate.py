@@ -148,7 +148,7 @@ def main(
         
         
         prompt = [generate_prompt(instruction, input) for instruction, input in zip(instructions, inputs)]
-        inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True, max_length=128).to("cuda:0")
+        inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True, max_length=200).to("cuda:0")
         generation_config = GenerationConfig(
             temperature=temperature,
             top_p=top_p,
