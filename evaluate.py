@@ -174,9 +174,9 @@ def main(
         s = generation_output.sequences
         scores = generation_output.scores[0].softmax(dim=-1)
         logits = torch.tensor(scores[:,[8241, 3782]], dtype=torch.float32).softmax(dim=-1)
-        # input_ids = inputs["input_ids"].to(device)
-        # L = input_ids.shape[1]
-        # s = generation_output.sequences
+        input_ids = inputs["input_ids"].to(device)
+        L = input_ids.shape[1]
+        s = generation_output.sequences
         output = tokenizer.batch_decode(s, skip_special_tokens=True)
         output = [_.split('Response:\n')[-1] for _ in output]
         
